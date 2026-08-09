@@ -22,29 +22,30 @@ function parse(lines) {
     });
 };
 
-function countByUser(records) {
+function countBy(records, key) {
   return records.reduce((acc, record) => {
-      const key = record.user;
-      acc[key] = (acc[key] || 0) + 1;
+      const groupKey = record[key];
+      acc[groupKey] = (acc[groupKey] || 0) + 1;
       return acc;
   }, {});
+};
+
+function countByUser(records) {
+  return countBy(records, "user");
 };
 
 function topAction(records) {
-  const count = records.reduce((acc, record) => {
-      const key = record.action;
-      acc[key] = (acc[key] || 0) + 1;
-      return acc;
-  }, {});
+  const count = countBy(records, "action")
 
   return Object.keys(count).reduce((best, action) => {
-    if (count[action] > count[best]);
-    return best; 
+    return count[action] > count[best] ? action : best;
   });
 };
 
-console.log(parse(logs));
+const records = parse(logs);
+
+console.log(records);
 console.log("----------------------")
-console.log(countByUser(parse(logs)))
+console.log(countByUser(records))
 console.log("----------------------")
-console.log(topAction(parse(logs)))
+console.log(topAction(records))
