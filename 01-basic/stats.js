@@ -35,10 +35,40 @@ function countByUser(records) {
 };
 
 function topAction(records) {
-  const count = countBy(records, "action")
+  const count = countBy(records, "action");
 
   return Object.keys(count).reduce((best, action) => {
     return count[action] > count[best] ? action : best;
+  });
+};
+
+function uniqueDates(records) { 
+  return records.reduce((acc, record) => {
+    const key = record.date;
+    if (!acc.includes(key)) acc.push(key);
+    return acc; 
+  }, []);
+};
+
+function countFailed(records) {
+  return records.reduce((acc, record) => {
+    return record.status === 'fail' ? acc + 1 : acc;
+  }, 0);
+  // records.filter(r => r.status === "fail").length
+};
+
+function userLine(records) {
+  return records.reduce((acc, record) => {
+    const key = record.user;
+    if (!acc.includes(key)) acc.push(key);
+    return acc;
+  }, []).join(', ');
+};
+
+function rarestUser(records) { 
+  const counts = countBy(records, "user");
+  return Object.keys(counts).reduce((worst, user) => {
+    return counts[user] < counts[worst] ? user : worst;
   });
 };
 
@@ -49,3 +79,11 @@ console.log("----------------------")
 console.log(countByUser(records))
 console.log("----------------------")
 console.log(topAction(records))
+console.log("----------------------")
+console.log(uniqueDates(records))
+console.log("----------------------")
+console.log(countFailed(records))
+console.log("----------------------")
+console.log(userLine(records))
+console.log("----------------------")
+console.log(rarestUser(records))
