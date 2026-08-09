@@ -30,8 +30,24 @@ function countBy(records, key) {
   }, {});
 };
 
+function uniqueBy(records, key) {
+  return records.reduce((acc, record) => {
+    const value = record[key];
+    if (!acc.includes(value)) acc.push(value);
+    return acc; 
+  }, []);
+};
+
 function countByUser(records) {
   return countBy(records, "user");
+};
+
+function uniqueDates(records) { 
+  return uniqueBy(records, "date");
+};
+
+function userLine(records) {
+  return uniqueBy(records, "user").join(', ');
 };
 
 function topAction(records) {
@@ -42,27 +58,11 @@ function topAction(records) {
   });
 };
 
-function uniqueDates(records) { 
-  return records.reduce((acc, record) => {
-    const key = record.date;
-    if (!acc.includes(key)) acc.push(key);
-    return acc; 
-  }, []);
-};
-
 function countFailed(records) {
   return records.reduce((acc, record) => {
     return record.status === 'fail' ? acc + 1 : acc;
   }, 0);
   // records.filter(r => r.status === "fail").length
-};
-
-function userLine(records) {
-  return records.reduce((acc, record) => {
-    const key = record.user;
-    if (!acc.includes(key)) acc.push(key);
-    return acc;
-  }, []).join(', ');
 };
 
 function rarestUser(records) { 
@@ -72,18 +72,37 @@ function rarestUser(records) {
   });
 };
 
+function findFirst(records, predicate) {
+  return records.find(predicate);
+}
+
+function hasAny(records, key, value) {
+  return records.some(r => r[key] === value);
+}
+
+function allSameDate(records) {
+  const firstDate = records[0].date;
+  return records.every(r => r.date === firstDate);
+}
+
 const records = parse(logs);
 
 console.log(records);
-console.log("----------------------")
-console.log(countByUser(records))
-console.log("----------------------")
-console.log(topAction(records))
-console.log("----------------------")
-console.log(uniqueDates(records))
-console.log("----------------------")
-console.log(countFailed(records))
-console.log("----------------------")
-console.log(userLine(records))
-console.log("----------------------")
-console.log(rarestUser(records))
+console.log("----------------------");
+console.log(countByUser(records));
+console.log("----------------------");
+console.log(topAction(records));
+console.log("----------------------");
+console.log(uniqueDates(records));
+console.log("----------------------");
+console.log(countFailed(records));
+console.log("----------------------");
+console.log(userLine(records));
+console.log("----------------------");
+console.log(rarestUser(records));
+console.log("----------------------");
+console.log(findFirst(records, r => r.status === "fail"));
+console.log("----------------------");
+console.log(hasAny(records, "action", "delete"));
+console.log("----------------------");
+console.log(allSameDate(records));
