@@ -85,6 +85,21 @@ function allSameDate(records) {
   return records.every(r => r.date === firstDate);
 }
 
+function withId(records) {
+  return records.map((r, i) => ({
+    ...r,
+    id: i
+  }));
+};
+
+function usersByActivity(records) {
+  const counts = countBy(records, "user");
+  return Object.entries(counts)
+    .sort(([, a], [, b]) => b - a)
+    .map(u => u[0]);
+  //return Object.keys(counts).sort((a,b) => counts[b] - counts[a])
+};
+
 const records = parse(logs);
 
 console.log(records);
@@ -106,3 +121,7 @@ console.log("----------------------");
 console.log(hasAny(records, "action", "delete"));
 console.log("----------------------");
 console.log(allSameDate(records));
+console.log("----------------------");
+console.log(withId(records)[0]);
+console.log("----------------------");
+console.log(usersByActivity(records))
