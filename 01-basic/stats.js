@@ -15,28 +15,7 @@ const logs = [
   "2026-08-04;petr;login;ok",
 ];
 
-function parse(lines) {
-    return lines.map(l => {
-      const [date, user, action, status] = l.split(";");
-      return {date, user, action, status};
-    });
-};
-
-function countBy(records, key) {
-  return records.reduce((acc, record) => {
-      const groupKey = record[key];
-      acc[groupKey] = (acc[groupKey] || 0) + 1;
-      return acc;
-  }, {});
-};
-
-function uniqueBy(records, key) {
-  return records.reduce((acc, record) => {
-    const value = record[key];
-    if (!acc.includes(value)) acc.push(value);
-    return acc; 
-  }, []);
-};
+import { parse, countBy, uniqueBy } from "./log-utils.js";
 
 function countByUser(records) {
   return countBy(records, "user");
