@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node 02-http/app.js",
+    "dev": "node --watch 02-http/app.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/varrbd06/node-learning/issues"
   },
-  "homepage": "https://github.com/varrbd06/node-learning#readme"
+  "homepage": "https://github.com/varrbd06/node-learning#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
 }
