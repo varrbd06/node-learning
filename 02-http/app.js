@@ -1,9 +1,10 @@
 import express from "express";
-import { createReadStream } from "node:fs";
+import { createReadStream, ReadStream, stat } from "node:fs";
 import {dirname, join} from "node:path";
 import { createInterface } from "node:readline";
 import { fileURLToPath } from "node:url";
 import { countBy } from "../01-basic/log-parser/log-utils.js"
+import { error } from "node:console";
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const logsPath = join(__dirname, "../01-basic/log-parser", "logs.txt")
@@ -63,6 +64,13 @@ app.get("/api/users/:user", (req, res) => {
         : res.status(200).json(stats);
 });
 
+app.get("/api/logs/:id", (req, res) => {
+    const id = req.params.id;
+    const record = records.find(r => r.id === Number(id));
+    if (!record) return res.status(404).json({ error: "Запись не найдена" });
+    res.status(200).json(record);
+});
+
 app.post("/api/logs", (req, res) => {
     const { date, user, action, status } = req.body;
 
@@ -77,6 +85,18 @@ app.post("/api/logs", (req, res) => {
     const newRecord = { id: nextId++, date, user, action, status };
     records.push(newRecord);
     res.status(201).json(newRecord);
+});
+
+app.delete("/api/logs/:id", (req, res) => {
+    const { id } = req.params;
+    const index = records.findIndex(r => r.id === Number(id));
+
+    if (index === -1) {
+        return res.status(404).json({error: "Запись не найдена"});
+    }
+
+    records.splice(index, 1);
+    res.status(204).end();
 });
 
 app.use((req, res) => {
