@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/varrbd06/node-learning#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "validation-express": "^0.0.2"
   }
 }
