@@ -7,13 +7,16 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const logsPath = join(__dirname, "../01-basic/log-parser", "logs.txt")
 
-async function readStats() {
+async function readStats(filters = {}) {
     const rl = createInterface({input: createReadStream(logsPath, "utf-8"), crlfDelay: Infinity})
     let total = 0, failed = 0;
     const byUser = {};
+    const { user: filterUser, status: filterStatus } = filters;
     for await (const line of rl) {
         if (!line.trim()) continue;
         const [date, user, action, status] = line.split(";");
+        if (filterUser && user !== filterUser) continue;
+        if (filterStatus && status !== filterStatus) continue;
         total++;
         if (status === "fail") failed++;
         byUser[user] = (byUser[user] || 0) + 1;
@@ -35,8 +38,16 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/logs", async (req, res) => {
-    const stats = await readStats();
-    res.status(200).json(stats);
+  const stats = await readStats(req.query);
+  res.status(200).json(stats);
+});
+
+app.get("/api/users/:user", async (req, res) => {
+    const { user } = req.params;
+    const stats = await readStats({ user });
+    stats.total === 0 
+        ? res.status(404).json({ error: "Юзер не найден" }) 
+        : res.status(200).json(stats);
 });
 
 app.use((req, res) => {
