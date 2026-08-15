@@ -1,4 +1,3 @@
-import { fail } from "node:assert";
 import { createReadStream, createWriteStream } from "node:fs";
 import { dirname, join } from "node:path";
 import { createInterface } from "node:readline";
