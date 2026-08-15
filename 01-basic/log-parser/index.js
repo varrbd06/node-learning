@@ -2,6 +2,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
+import { createReadStream  } from "node:fs";
+
 import { parse } from "./log-utils.js";
 import { countByUser, countFailed, topAction, uniqueDates } from "./stats.js";
 
@@ -17,7 +19,16 @@ const save = flags.includes("--save");
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const logsPath = join(__dirname, fileName);
 
-function printReport(records) {
+const stream = createReadStream(logsPath, "utf-8")
+
+stream.on("data", chunk => {
+    console.log('кусок', chunk.length, 'символов');
+});
+
+stream.on("end", () => {console.log('готово')});
+stream.on("error", err => {console.log('сбой', err.message)});
+
+/* function printReport(records) {
     console.log("Статистика:", {
         Records: records.length,
         Dates: uniqueDates(records),
@@ -25,7 +36,7 @@ function printReport(records) {
         TopAction: topAction(records),
         Failed: countFailed(records)
     });
-};
+}; */
 
 function buildReport(records) {
   return `

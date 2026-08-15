@@ -1,0 +1,14 @@
+2026-08-01;ivan;login;ok
+2026-08-01;petr;login;ok
+2026-08-01;ivan;upload;ok
+2026-08-02;anna;login;fail
+2026-08-02;anna;login;ok
+2026-08-02;petr;upload;ok
+2026-08-02;ivan;delete;ok
+2026-08-03;petr;login;ok
+2026-08-03;anna;upload;fail
+2026-08-03;ivan;login;ok
+2026-08-03;petr;delete;fail
+2026-08-04;anna;upload;ok
+2026-08-04;ivan;login;ok
+2026-08-04;petr;login;ok
