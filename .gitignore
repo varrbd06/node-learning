@@ -1,2 +1,14 @@
 node_modules/
 .DS_Store
+
+*.log
+npm-debug.log*
+report.txt
+logs-copy.txt
+
+.env
+.env.local
+
+# редакторы
+.vscode/
+.idea/
