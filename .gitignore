@@ -9,6 +9,5 @@ logs-copy.txt
 .env
 .env.local
 
-# редакторы
 .vscode/
 .idea/
